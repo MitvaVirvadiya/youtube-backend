@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { app } from "./app.js";
 
 dotenv.config({
-    path: './env'
+    path: './.env'
 })
 
 connectDB()
@@ -17,6 +17,6 @@ connectDB()
         console.log(`\n⛏️  Server is running at PORT: ${process.env.PORT}`);
     })
 })
-.catch((err) => {
+.catch((err) => {~
     console.log("MongoBD Connection Failes!!", err);
 })
