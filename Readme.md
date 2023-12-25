@@ -44,7 +44,7 @@ This project is my hands-on journey to create a simplified version of YouTube. F
 
 ## Learning Resources
 
-- [Chai Aur Code YouTube Channel](https://www.youtube.com/channel/UC7ZcDKe3WzU9uhUnsZvK4gQ): Hitesh Choudhary's tutorials are gold for learning backend development.
+- [Chai Aur Code YouTube Channel]([https://www.youtube.com/channel/UC7ZcDKe3WzU9uhUnsZvK4gQ](https://www.youtube.com/@chaiaurcode)): Hitesh Choudhary's tutorials are gold for learning backend development.
 
 ## Acknowledgments
 
