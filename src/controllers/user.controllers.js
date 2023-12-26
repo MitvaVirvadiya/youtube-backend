@@ -290,13 +290,16 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Avatar File is missing");
   }
 
-  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  const user = await User.findById(req.user?._id).select("avatar");
+  const oldImageUrl = user.avatar;
+
+  const avatar = await uploadOnCloudinary(avatarLocalPath, oldImageUrl);
 
   if (!avatar.url) {
     throw new ApiError(400, "Error while uploading Avatar file");
   }
 
-  const user = await User.findByIdAndUpdate(
+  const updatedUser = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
@@ -308,7 +311,9 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, user, "User avatar updated successfully"));
+    .json(
+      new ApiResponse(200, updatedUser, "User avatar updated successfully")
+    );
 });
 
 const updateUserCoverImage = asyncHandler(async (req, res) => {
@@ -318,13 +323,16 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Cover Image File is missing");
   }
 
-  const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+  const user = await User.findById(req.user?._id).select("coverImage");
+  const oldImageUrl = user.coverImage;
+
+  const coverImage = await uploadOnCloudinary(coverImageLocalPath, oldImageUrl);
 
   if (!coverImage.url) {
     throw new ApiError(400, "Error while uploading cover image file");
   }
 
-  const user = await User.findByIdAndUpdate(
+  const updatedUser = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
@@ -336,7 +344,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, user, "User cover image updated successfully"));
+    .json(new ApiResponse(200, updatedUser, "User cover image updated successfully"));
 });
 
 const getUserChannelProfile = asyncHandler(async (req, res) => {
@@ -371,10 +379,10 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     {
       $addFields: {
         subscriberCount: {
-          $size: "subscribers",
+          $size: "$subscribers",
         },
         channelSubscribedTO: {
-          $size: "subscribedTo",
+          $size: "$subscribedTo",
         },
         isSubscribed: {
           $cond: {
@@ -411,7 +419,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
 });
 
 const getWatchHistroy = asyncHandler(async (req, res) => {
-  await User.aggregate([
+  const user = await User.aggregate([
     {
       $match: {
         _id: new mongoose.Types.ObjectId(req.user._id),

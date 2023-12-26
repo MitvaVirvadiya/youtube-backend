@@ -5,6 +5,7 @@ import {
   getWatchHistroy,
   refreshAccessToken,
   updateUserAvatar,
+  updateUserCoverImage,
   updateUserDetails,
   userLogin,
   userLogout,
@@ -29,7 +30,6 @@ router.route("/register").post(
   ]),
   userRegister
 );
-
 router.route("/login").post(userLogin);
 
 //secured routes
@@ -43,7 +43,7 @@ router
   .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
 router
   .route("/update-cover-image")
-  .patch(verifyJWT, upload.single("coverImage"), updateUserAvatar);
+  .patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage);
 router.route("/channel/:username").get(verifyJWT, getUserChannelProfile);
 router.route("/history").get(verifyJWT, getWatchHistroy);
 
