@@ -159,8 +159,8 @@ const userLogout = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
     {
-      $set: {
-        refreshToken: undefined,
+      $unset: {
+        refreshToken: 1,
       },
     },
     {
@@ -452,7 +452,7 @@ const getWatchHistroy = asyncHandler(async (req, res) => {
           {
             $addFields: {
               owner: {
-                $first: $owner,
+                $first: "$owner",
               },
             },
           },
@@ -466,8 +466,8 @@ const getWatchHistroy = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
+        "Watch history fetched Successfully",
         user[0].watchHistory,
-        "Watch history fetched Successfully"
       )
     );
 });
